@@ -1,6 +1,5 @@
 package dev.abeatriz.account_service.config;
 
-import dev.abeatriz.account_service.entity.Account;
 import dev.abeatriz.account_service.entity.Notification;
 import dev.abeatriz.account_service.entity.Transaction;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -21,7 +20,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    @Value(value = "${spring.kafka.bootstrap-servers:localhost:9092}")
+    @Value(value = "${spring.kafka.bootstrap-servers:kafka:9092}")
     private String serverKafkaAddres;
 
     @Bean
