@@ -2,10 +2,11 @@ services:
     discovery-service:
         build: ./discovery-service
         container_name: discovery-service
+        env_file: .env
         ports:
-            - "8761:8761"
+            - "${DISCOVERY_SERVICE_PORT}:${DISCOVERY_SERVICE_PORT}"
         healthcheck:
-            test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+            test: [ "CMD", "curl", "-f", "http://localhost:${DISCOVERY_SERVICE_PORT}/actuator/health" ]
             interval: 30s
             timeout: 10s
             retries: 5
@@ -16,8 +17,9 @@ services:
     gateway-service:
         build: ./gateway-service
         container_name: gateway-service
+        env_file: .env
         ports:
-            - "8080:8080"
+            - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
         depends_on:
             - kafka
             - discovery-service
@@ -26,8 +28,9 @@ services:
     account-service:
         build: ./account-service
         container_name: account-service
+        env_file: .env
         ports:
-            - "8081:8081"
+            - "${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}"
         depends_on:
             - kafka
             - discovery-service
@@ -36,8 +39,9 @@ services:
     notification-service:
         build: ./notification-service
         container_name: notification-service
+        env_file: .env
         ports:
-            - "8082:8082"
+            - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
         depends_on:
             - kafka
             - discovery-service
@@ -46,8 +50,9 @@ services:
     transaction-service:
         build: ./transaction-service
         container_name: transaction-service
+        env_file: .env
         ports:
-            - "8083:8083"
+            - "${TRANSACTION_SERVICE_PORT}:${TRANSACTION_SERVICE_PORT}"
         depends_on:
             - kafka
             - discovery-service
@@ -56,15 +61,15 @@ services:
     kafka:
         image: confluentinc/cp-kafka:latest
         ports:
-            - "9092:9092"
+            - "${KAFKA_PORT}:${KAFKA_PORT}"
         environment:
             KAFKA_BROKER_ID: 1
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:${ZOOKEEPER_PORT}
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:${KAFKA_PORT},PLAINTEXT_HOST://localhost:${KAFKA_PORT}
             KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
             KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
             KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-            KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+            KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:${KAFKA_PORT},PLAINTEXT_HOST://0.0.0.0:29092
         depends_on:
             - zookeeper
         networks:
@@ -72,16 +77,16 @@ services:
     zookeeper:
         image: confluentinc/cp-zookeeper:latest
         ports:
-            - "2181:2181"
+            - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"
         environment:
-            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
             ZOOKEEPER_TICK_TIME: 2000
         networks:
             - my-network
     kafdrop:
         image: obsidiandynamics/kafdrop
         ports:
-            - "9000:9000"
+            - "${KAFKADROP_PORT}:${KAFKADROP_PORT}"
         environment:
             KAFKA_BROKERCONNECT: kafka:29092
             JVM_OPTS: "-Xms32M -Xmx64M"

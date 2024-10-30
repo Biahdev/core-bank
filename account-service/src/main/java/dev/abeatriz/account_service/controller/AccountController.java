@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class AccountController {
 
-
     @Autowired
     private final KafkaTemplate<String, Notification> kafkaTemplate;
 
