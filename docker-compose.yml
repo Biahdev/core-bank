@@ -83,17 +83,6 @@ services:
             ZOOKEEPER_TICK_TIME: 2000
         networks:
             - my-network
-    kafdrop:
-        image: obsidiandynamics/kafdrop
-        ports:
-            - "${KAFKADROP_PORT}:${KAFKADROP_PORT}"
-        environment:
-            KAFKA_BROKERCONNECT: kafka:29092
-            JVM_OPTS: "-Xms32M -Xmx64M"
-        depends_on:
-            - kafka
-        networks:
-            - my-network
 networks:
     my-network:
         driver: bridge
