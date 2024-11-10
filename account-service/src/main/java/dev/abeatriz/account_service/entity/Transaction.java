@@ -1,6 +1,7 @@
 package dev.abeatriz.account_service.entity;
 
 
+import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.math.BigDecimal;
