@@ -9,6 +9,8 @@ public class TransactionConsumerService {
 
     @KafkaListener(topics = "new-transaction-topic")
     public void processarPagamento(Transaction transaction) {
+
+
         System.out.println("Transação consumida com sucesso!" + transaction);
     }
 }

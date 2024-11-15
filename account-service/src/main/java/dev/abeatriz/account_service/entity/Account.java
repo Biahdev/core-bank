@@ -33,7 +33,7 @@ public class Account {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Account(String name, String document, BigDecimal balance, AccountStatus status, AccountType type){
+    public Account(String name, String document, BigDecimal balance, AccountStatus status, AccountType type) {
         this.name = name;
         this.document = document;
         this.balance = balance;

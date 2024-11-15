@@ -12,6 +12,7 @@ import lombok.*;
 public class Notification {
 
     private Long accountId;
-    private NotificationChannel channe;
+    private NotificationChannel channel;
     private String notes;
+
 }

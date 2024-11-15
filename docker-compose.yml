@@ -83,6 +83,21 @@ services:
             ZOOKEEPER_TICK_TIME: 2000
         networks:
             - my-network
+    db-account-service:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: account_db
+            MYSQL_USER: bia
+            MYSQL_PASSWORD: 1234
+        ports:
+            - "3307:3306"
+        networks:
+            - my-network
+        volumes:
+            - mysql_data:/var/lib/mysql
+volumes:
+    mysql_data:
 networks:
     my-network:
         driver: bridge
