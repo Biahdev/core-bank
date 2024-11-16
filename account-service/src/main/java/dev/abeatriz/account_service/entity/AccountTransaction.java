@@ -14,14 +14,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
-public class Transaction {
+@Table(name = "account_transactions")
+public class AccountTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long transactionId;
+    private Long accountTransactionId;
     private Long accountId;
+    private Long transactionId;
     private BigDecimal amount;
-    private BigDecimal balance_after_transaction;
+    private BigDecimal balanceAfterTransaction;
     private TransactionType type;
     private TransactionMethod method;
 
@@ -33,5 +35,12 @@ public class Transaction {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
+    public AccountTransaction(Long transactionId, Long accountId, BigDecimal amount, BigDecimal balanceAfterTransaction, TransactionType type, TransactionMethod method) {
+        this.accountId = accountId;
+        this.transactionId = transactionId;
+        this.amount = amount;
+        this.balanceAfterTransaction = balanceAfterTransaction;
+        this.type = type;
+        this.method = method;
+    }
 }

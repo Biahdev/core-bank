@@ -1,4 +1,51 @@
 services:
+    account-service:
+        build: ./account-service
+        container_name: account-service
+        env_file: .env
+        ports:
+            - "${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}"
+        depends_on:
+            - kafka
+            - discovery-service
+            - db-account-service
+        networks:
+            - my-network
+    db-account-service:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: account_db
+            MYSQL_USER: bia
+            MYSQL_PASSWORD: 1234
+        ports:
+            - "3307:3306"
+        networks:
+            - my-network
+        volumes:
+            - mysql_data:/var/lib/mysql
+    notification-service:
+        build: ./notification-service
+        container_name: notification-service
+        env_file: .env
+        ports:
+            - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
+        depends_on:
+            - kafka
+            - discovery-service
+        networks:
+            - my-network
+    transaction-service:
+        build: ./transaction-service
+        container_name: transaction-service
+        env_file: .env
+        ports:
+            - "${TRANSACTION_SERVICE_PORT}:${TRANSACTION_SERVICE_PORT}"
+        depends_on:
+            - kafka
+            - discovery-service
+        networks:
+            - my-network
     discovery-service:
         build: ./discovery-service
         container_name: discovery-service
@@ -20,39 +67,6 @@ services:
         env_file: .env
         ports:
             - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
-        depends_on:
-            - kafka
-            - discovery-service
-        networks:
-            - my-network
-    account-service:
-        build: ./account-service
-        container_name: account-service
-        env_file: .env
-        ports:
-            - "${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}"
-        depends_on:
-            - kafka
-            - discovery-service
-        networks:
-            - my-network
-    notification-service:
-        build: ./notification-service
-        container_name: notification-service
-        env_file: .env
-        ports:
-            - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
-        depends_on:
-            - kafka
-            - discovery-service
-        networks:
-            - my-network
-    transaction-service:
-        build: ./transaction-service
-        container_name: transaction-service
-        env_file: .env
-        ports:
-            - "${TRANSACTION_SERVICE_PORT}:${TRANSACTION_SERVICE_PORT}"
         depends_on:
             - kafka
             - discovery-service
@@ -83,19 +97,6 @@ services:
             ZOOKEEPER_TICK_TIME: 2000
         networks:
             - my-network
-    db-account-service:
-        image: mysql:8.0
-        environment:
-            MYSQL_ROOT_PASSWORD: 1234
-            MYSQL_DATABASE: account_db
-            MYSQL_USER: bia
-            MYSQL_PASSWORD: 1234
-        ports:
-            - "3307:3306"
-        networks:
-            - my-network
-        volumes:
-            - mysql_data:/var/lib/mysql
 volumes:
     mysql_data:
 networks:

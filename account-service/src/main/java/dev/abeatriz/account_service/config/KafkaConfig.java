@@ -1,7 +1,7 @@
 package dev.abeatriz.account_service.config;
 
-import dev.abeatriz.account_service.entity.Notification;
-import dev.abeatriz.account_service.entity.Transaction;
+import dev.abeatriz.account_service.dto.NotificationMessageDTO;
+import dev.abeatriz.account_service.dto.TransactionMessageDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -24,7 +24,7 @@ public class KafkaConfig {
     private String serverKafkaAddres;
 
     @Bean
-    public ProducerFactory<String, Notification> producerFactory() {
+    public ProducerFactory<String, NotificationMessageDTO> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, serverKafkaAddres);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,12 +33,12 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Notification> kafkaTemplate() {
+    public KafkaTemplate<String, NotificationMessageDTO> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
     @Bean
-    public ConsumerFactory<String, Transaction> consumerFactory() {
+    public ConsumerFactory<String, TransactionMessageDTO> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, serverKafkaAddres);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
@@ -47,15 +47,15 @@ public class KafkaConfig {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Transaction.class.getName());
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, TransactionMessageDTO.class.getName());
 
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Transaction>
+    public ConcurrentKafkaListenerContainerFactory<String, TransactionMessageDTO>
     kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Transaction> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, TransactionMessageDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }

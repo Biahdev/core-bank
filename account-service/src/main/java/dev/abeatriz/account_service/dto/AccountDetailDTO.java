@@ -7,15 +7,10 @@ import java.math.BigDecimal;
 
 public record AccountDetailDTO(
         Long accountId,
-
         String name,
-
         String document,
-
         BigDecimal balance,
-
         AccountStatus status,
-
         AccountType type
-        ) {
+) {
 }

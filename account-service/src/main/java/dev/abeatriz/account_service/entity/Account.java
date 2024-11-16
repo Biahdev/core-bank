@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name = "accounts")
 public class Account {
 
     @Id
@@ -40,5 +41,4 @@ public class Account {
         this.status = status;
         this.type = type;
     }
-
 }
