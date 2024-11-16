@@ -23,18 +23,7 @@ services:
         networks:
             - my-network
         volumes:
-            - mysql_data:/var/lib/mysql
-    notification-service:
-        build: ./notification-service
-        container_name: notification-service
-        env_file: .env
-        ports:
-            - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
-        depends_on:
-            - kafka
-            - discovery-service
-        networks:
-            - my-network
+            - mysql_data_account:/var/lib/mysql
     transaction-service:
         build: ./transaction-service
         container_name: transaction-service
@@ -46,6 +35,43 @@ services:
             - discovery-service
         networks:
             - my-network
+    db-transaction-service:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: transaction_db
+            MYSQL_USER: bia
+            MYSQL_PASSWORD: 1234
+        ports:
+            - "3308:3306"
+        networks:
+            - my-network
+        volumes:
+            - mysql_data_transaction:/var/lib/mysql
+    notification-service:
+        build: ./notification-service
+        container_name: notification-service
+        env_file: .env
+        ports:
+            - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
+        depends_on:
+            - kafka
+            - discovery-service
+        networks:
+            - my-network
+    db-notification-service:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: notification_db
+            MYSQL_USER: bia
+            MYSQL_PASSWORD: 1234
+        ports:
+            - "3309:3306"
+        networks:
+            - my-network
+        volumes:
+            - mysql_data_notification:/var/lib/mysql
     discovery-service:
         build: ./discovery-service
         container_name: discovery-service
@@ -98,7 +124,10 @@ services:
         networks:
             - my-network
 volumes:
-    mysql_data:
+    mysql_data_account:
+    mysql_data_transaction:
+    mysql_data_notification:
+
 networks:
     my-network:
         driver: bridge
