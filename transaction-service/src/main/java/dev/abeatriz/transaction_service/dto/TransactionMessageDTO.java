@@ -1,6 +1,6 @@
-package dev.abeatriz.account_service.dto;
+package dev.abeatriz.transaction_service.dto;
 
-import dev.abeatriz.account_service.entity.TransactionType;
+import dev.abeatriz.transaction_service.entity.TransactionMethod;
 
 import java.math.BigDecimal;
 
@@ -8,6 +8,6 @@ public record TransactionMessageDTO(
         Long accountId,
         Long transactionId,
         BigDecimal amount,
-        TransactionType type
+        TransactionMethod method
 ) {
 }

@@ -1,6 +1,6 @@
 package dev.abeatriz.transaction_service.service;
 
-import dev.abeatriz.transaction_service.entity.Account;
+import dev.abeatriz.transaction_service.dto.AccountDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AccountClientFeign {
 
     @GetMapping("/account/{id}")
-    Account getById(@PathVariable("id") Long contaId);
+    AccountDTO getById(@PathVariable("id") Long contaId);
 
 }

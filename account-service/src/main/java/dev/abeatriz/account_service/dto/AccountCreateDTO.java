@@ -7,6 +7,7 @@ public record AccountCreateDTO(
         @NotBlank
         @Size(min = 3, max = 150)
         String name,
+
         @NotBlank
         @Size(min = 3, max = 100)
         String document

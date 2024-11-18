@@ -25,7 +25,6 @@ public class AccountTransaction {
     private BigDecimal amount;
     private BigDecimal balanceAfterTransaction;
     private TransactionType type;
-    private TransactionMethod method;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -35,12 +34,11 @@ public class AccountTransaction {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public AccountTransaction(Long transactionId, Long accountId, BigDecimal amount, BigDecimal balanceAfterTransaction, TransactionType type, TransactionMethod method) {
+    public AccountTransaction(Long transactionId, Long accountId, BigDecimal amount, BigDecimal balanceAfterTransaction, TransactionType type) {
         this.accountId = accountId;
         this.transactionId = transactionId;
         this.amount = amount;
         this.balanceAfterTransaction = balanceAfterTransaction;
         this.type = type;
-        this.method = method;
     }
 }

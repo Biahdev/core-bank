@@ -15,7 +15,7 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping
-    public AccountDetailDTO newAccount(@RequestBody @Valid AccountCreateDTO json) {
+    public AccountDetailDTO create(@RequestBody @Valid AccountCreateDTO json) {
         return accountService.create(json);
     }
 

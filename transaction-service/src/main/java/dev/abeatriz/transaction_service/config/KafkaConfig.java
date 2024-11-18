@@ -1,5 +1,6 @@
 package dev.abeatriz.transaction_service.config;
 
+import dev.abeatriz.transaction_service.dto.NotificationMessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,5 @@ public class KafkaConfig {
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
-
 }
 

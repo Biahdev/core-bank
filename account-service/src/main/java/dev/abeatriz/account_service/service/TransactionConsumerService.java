@@ -32,8 +32,10 @@ public class TransactionConsumerService {
             balanceAfterTransaction = account.balance().subtract(transaction.amount());
         }
 
-        var newTransaction = new AccountTransaction(transaction.accountId(), transaction.transactionId(), transaction.amount(), balanceAfterTransaction, transaction.type(), transaction.method());
+        var newTransaction = new AccountTransaction(transaction.accountId(), transaction.transactionId(), transaction.amount(), balanceAfterTransaction, transaction.type());
         accountTransactionRepository.save(newTransaction);
+
+        //TODO: Diminuir do valor do Account
 
         System.out.println("Transação consumida com sucesso!" + newTransaction);
     }

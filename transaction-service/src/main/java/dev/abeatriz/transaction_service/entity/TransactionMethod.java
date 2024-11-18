@@ -1,4 +1,4 @@
-package dev.abeatriz.account_service.entity;
+package dev.abeatriz.transaction_service.entity;
 
 public enum TransactionMethod {
     PIX,
