@@ -40,7 +40,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleEntityNotFoundException(EntityNotFoundException ex) {
-        var msg = ex.getMessage() != null ? "Entidade " + ex.getMessage() + " não foi encontrada" : "Entidade não foi encontrada";
+        var msg = ex.getMessage() != null ? ex.getMessage() : "Entidade não foi encontrada";
         var errorMessage = new ErrorMessage(msg, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }

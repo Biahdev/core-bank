@@ -2,11 +2,14 @@ package dev.abeatriz.account_service.service;
 
 import dev.abeatriz.account_service.entity.AccountTransaction;
 import dev.abeatriz.account_service.dto.NotificationMessage;
+import dev.abeatriz.account_service.entity.NotificationChannel;
+import dev.abeatriz.account_service.entity.TransactionType;
 import dev.abeatriz.account_service.repository.AccountRepository;
 import dev.abeatriz.account_service.repository.AccountTransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import dev.abeatriz.account_service.dto.TransactionAccountMessage;
 
@@ -20,6 +23,12 @@ public class TransactionConsumerService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private KafkaTemplate<String, NotificationMessage> kafkaNotification;
+
+
+    private final String newNotificationTopic = "new-notication-topic";
 
     @Autowired
     private AccountTransactionRepository accountTransactionRepository;
@@ -37,19 +46,18 @@ public class TransactionConsumerService {
         destinationAccount.setBalance(newDestinationAmount);
         accountRepository.save(destinationAccount);
 
-        var newTransactionSource = new AccountTransaction(transaction.sourceAccountId(), transaction.transactionId(), transaction.amount(), newSourceAmount);
+        var newTransactionSource = new AccountTransaction(transaction.sourceAccountId(), transaction.transactionId(), transaction.amount(), newSourceAmount, TransactionType.PAYMENT);
         accountTransactionRepository.save(newTransactionSource);
 
-        var newDestinationSource = new AccountTransaction(transaction.destinationAccountId(), transaction.transactionId(), transaction.amount(), newDestinationAmount);
+        var newDestinationSource = new AccountTransaction(transaction.destinationAccountId(), transaction.transactionId(), transaction.amount(), newDestinationAmount, TransactionType.RECEIPT);
         accountTransactionRepository.save(newDestinationSource);
 
-        //TODO: Diminuir do valor do Account
-        var notificationSourceMessage = new NotificationMessage(json.sourceAccountId(), NotificationChannel.PUSH, "Transação enviada com sucesso!");
+        var notificationSourceMessage = new NotificationMessage(transaction.sourceAccountId(), NotificationChannel.PUSH, "Transação enviada com sucesso!");
         kafkaNotification.send(newNotificationTopic, notificationSourceMessage);
+        System.out.println("Transação consumida com sucesso!" + notificationSourceMessage);
 
-        var notificationDestinationMessage = new NotificationMessage(json.destinationAccountId(), NotificationChannel.PUSH, "Você recebeu uma transação de R$" + json.amount());
-        kafkaNotification.send(newNotificationTopic, notificationMessage);
-
-        System.out.println("Transação consumida com sucesso!" + newTransaction);
+        var notificationDestinationMessage = new NotificationMessage(transaction.destinationAccountId(), NotificationChannel.PUSH, "Você recebeu uma transação de R$" + transaction.amount());
+        kafkaNotification.send(newNotificationTopic, notificationDestinationMessage);
+        System.out.println("Transação consumida com sucesso!" + notificationDestinationMessage);
     }
 }

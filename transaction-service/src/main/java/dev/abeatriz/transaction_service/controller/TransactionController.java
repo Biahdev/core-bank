@@ -24,12 +24,10 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    /*
+
     @PostMapping
     public TransactionDetailDTO create(@RequestBody TransactionCreateDTO json) {
         return transactionService.create(json);
     }
-    */
-
 
 }
