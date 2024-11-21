@@ -25,7 +25,6 @@ public class Transaction {
     private Long destinationAccountId;
     private BigDecimal amount;
     private TransactionStatus status;
-    private TransactionType type;
     private TransactionMethod method;
     private String notes;
 

@@ -1,6 +1,7 @@
 package dev.abeatriz.transaction_service.config;
 
 import dev.abeatriz.transaction_service.dto.NotificationMessageDTO;
+import dev.abeatriz.transaction_service.dto.TransactionAccountMessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,7 @@ public class KafkaConfig {
     private String serverKafkaAddres;
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public ProducerFactory<String, NotificationMessageDTO> producerFactoryNotification() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, serverKafkaAddres);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,8 +31,22 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, NotificationMessageDTO> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactoryNotification());
+    }
+
+    @Bean
+    public ProducerFactory<String, TransactionAccountMessageDTO> producerFactoryTransaction() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, serverKafkaAddres);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
+    public KafkaTemplate<String, TransactionAccountMessageDTO> kafkaTemplateTransaction() {
+        return new KafkaTemplate<>(producerFactoryTransaction());
     }
 }
 

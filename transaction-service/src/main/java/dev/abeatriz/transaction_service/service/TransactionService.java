@@ -1,12 +1,12 @@
 package dev.abeatriz.transaction_service.service;
 
-import dev.abeatriz.transaction_service.dto.NotificationMessageDTO;
-import dev.abeatriz.transaction_service.dto.TransactionCreateDTO;
-import dev.abeatriz.transaction_service.dto.TransactionDetailDTO;
+import dev.abeatriz.transaction_service.dto.*;
 import dev.abeatriz.transaction_service.entity.NotificationChannel;
 import dev.abeatriz.transaction_service.entity.Transaction;
 import dev.abeatriz.transaction_service.entity.TransactionStatus;
+import dev.abeatriz.transaction_service.mapper.TransactionMapper;
 import dev.abeatriz.transaction_service.repository.TransactionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -18,63 +18,46 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     @Autowired
-    private KafkaTemplate<String, NotificationMessageDTO> kafkaTemplate;
+    private TransactionMapper transactionMapper;
+
+    @Autowired
+    private KafkaTemplate<String, NotificationMessageDTO> kafkaNotification;
+
+    @Autowired
+    private KafkaTemplate<String, TransactionAccountMessageDTO> kafkaTransaction;
 
     @Autowired
     private AccountClientFeign accountClientFeign;
 
-    public TransactionDetailDTO create(TransactionCreateDTO json) {
+    private final String newTansactionTopic = "new-transaction-topic";
+    private final String newNotificationTopic = "new-notication-topic";
 
-        var newTansactionTopic = "new-transaction-topic";
+
+    public TransactionDetailDTO create(TransactionCreateDTO json) {
         var sourceAccount = accountClientFeign.getById(json.sourceAccountId());
         var destinationAccount = accountClientFeign.getById(json.destinationAccountId());
-        // trnaformar json.method em Enum, fazer um mapper para tranformar isso
-        var newTransaction =  new Transaction(json.sourceAccountId(), json.destinationAccountId(), json.amount(), TransactionStatus.FAIL, json.method(), "");
+        var newTransaction = new Transaction(json.sourceAccountId(), json.destinationAccountId(), json.amount(), TransactionStatus.PENDING, transactionMapper.toEnumMethod(json.method()), "");
 
-
-        if(sourceAccount == null  || destinationAccount == null){
-            // Lança um exception que o API Handler vai tratar
+        if (sourceAccount == null || destinationAccount == null) {
+            newTransaction.setStatus(TransactionStatus.FAIL);
+            transactionRepository.save(newTransaction);
+            throw new EntityNotFoundException("Não foi encontrado as contas selecionadas");
         }
 
-        if(sourceAccount.balance().compareTo(json.amount()) > 0){
-            // Lança exception informando que a conta origem não tem saúdo suficiente
-            var notification = new NotificationMessageDTO(sourceAccount.accountId(), NotificationChannel.PUSH, "Saldo insuficiênte na conta origem");
-            this.kafkaTemplate.send(newTansactionTopic, notification);
-
+        if (sourceAccount.balance().compareTo(json.amount()) < 0) {
+            newTransaction.setStatus(TransactionStatus.FAIL);
+            transactionRepository.save(newTransaction);
+            var notification = new NotificationMessageDTO(sourceAccount.accountId(), NotificationChannel.PUSH, "Transação não foi concluída, saldo insuficiênte");
+            kafkaNotification.send(newNotificationTopic, notification);
+            throw new EntityNotFoundException("Saldo insuficiênte na conta origem");
         }
 
+        newTransaction.setStatus(TransactionStatus.SUCCESS);
+        var save = transactionRepository.save(newTransaction);
 
-        // Na transação, tipo metodo status accountId
-        // criar transactionId nesse serviço
+        var transaction = new TransactionAccountMessageDTO(json.sourceAccountId(), json.destinationAccountId(), save.getTransactionId(), json.amount());
+        kafkaTransaction.send(newTansactionTopic, transaction);
 
-        // Validar se tem saldo, se tiver sucesso manda pra acount-service
-        // caso contrario não mande para account-service e envie uma notificação para o usuario
-        // informando que não tem saldo suficiente na conta
-
-        json.setAccountId(1L);
-
-
-        Notification notification;
-
-        if (account.getBankBalance().compareTo(json.getAmount()) > 0) {
-            notification = new Notification(json.getAccountId(), NotificationChannel.PUSH, "Parabéns! Transação concluída com sucesso!");
-            json.setStatus(TransactionStatus.SUCESSO);
-
-
-            kafkaTemplate.send(new_transaction_topic, notification);
-            System.out.println("Tópico -> " + newTansactionTopic + " | Object -> " + json);
-
-        } else {
-            notification = new Notification(json.getAccountId(), NotificationChannel.PUSH, "Saldo insuficiente");
-            json.setStatus(TransactionStatus.FALHA);
-        }
-
-
-        var newTansactionTopic = "new-notication-topic";
-        kafkaTemplate.send(newTansactionTopic, notification);
-        System.out.println("Tópico -> " + newTansactionTopic + " | Object -> " + notification);
-
+        return transactionMapper.toDTO(save);
     }
-
-
 }

@@ -56,7 +56,7 @@ services:
             - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
         depends_on:
             - kafka
-            - notification-service
+            - db-notification-service
         networks:
             - my-network
     db-notification-service:
