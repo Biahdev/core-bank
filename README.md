@@ -16,30 +16,25 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 - **Kafka**: É utilizado como **message broker** para a comunicação assíncrona entre os microserviços. O **Transaction
   Service** emite eventos de transações, e o **Account Service** consome essas mensagens para atualizar os saldos das
   contas. O **Notification Service** também consome eventos para enviar notificações de transações.
+- **Swagger**: Toda a documentação das APIs está disponível através do Swagger UI, centralizada no **API Gateway**.
 - **Eureka**: O **Eureka** serve como o **service discovery** para registrar os microserviços e permitir que eles se
   comuniquem sem a necessidade de configuração estática de IPs ou portas, facilitando a escalabilidade e a integração
   entre os serviços.
-- **Swagger**: Toda a documentação das APIs está disponível através do Swagger UI, centralizada no **API Gateway**.
-- **Banco de dados**: Cada microserviço possui seu próprio banco de dados MySQL, garantindo o princípio de **banco de
-  dados por
-  microserviço**.
 
 ## ✅ TODO List
 
 ### Implementado
-
 - Operações básicas para contas, transações e notificações
+- Comunicação assíncrona via Kafka
 
 ### Em Progresso
-
 - Marcar notificações como lidas
 - Documentação com Swagger
 
 ### Planejado
-
 - Autenticação com JWT
-- Documentação com Swagger
-- Comunicação assíncrona via Kafka
+- Testes automatizados
+
 
 ## 📖 **Endpoints**
 
