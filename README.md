@@ -1,34 +1,10 @@
 # 💳 CoreBank
 
-**CoreBank** é um sistema bancário baseado em uma arquitetura de **microserviços** utilizando **Spring Boot 3**, **Kafka
-**, **Eureka** e **MySQL**.
-O projeto foi criado como uma aplicação prática para consolidar conhecimentos sobre **microserviços**, **event-driven
-architecture** e **Kafka**, explorando também aspectos de **descoberta de serviços** com **Eureka**.
-
----
-
-## 📚 **Objetivo do Projeto**
-
-O **CoreBank** foi desenvolvido como uma oportunidade prática para consolidar e aplicar conhecimentos adquiridos durante
-meus estudos sobre:
-
-- Arquitetura de **Microserviços**
-- **Comunicação assíncrona** com **Kafka**
-- **Service Discovery** com **Eureka**
-
-Além disso, o projeto visa explorar boas práticas no desenvolvimento de software, como a documentação com Swagger e a
-implementação de testes automatizados.
-
----
-
-## 🚀 Tecnologias
-
-- Spring Boot 3
-- MySQL
-- Kafka
-- Docker Compose
-- Swagger (SpringDoc OpenAPI)
-- JUnit
+**CoreBank** é um sistema bancário que permite a criação de contas, gestão de transações financeiras e envio de
+notificações para os clientes.
+O projeto foi desenvolvido com Spring Boot 3, MySQL, Kafka, Docker Compose, Swagger e JUnit, visando consolidar
+conhecimentos em **microserviços**, **event-driven architecture** e boas práticas de desenvolvimento,
+incluindo documentação com Swagger e testes automatizados.
 
 ---
 
