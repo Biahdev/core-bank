@@ -6,8 +6,6 @@ O projeto foi desenvolvido com Spring Boot 3, MySQL, Kafka, Docker Compose, Swag
 conhecimentos em **microserviços**, **event-driven architecture** e boas práticas de desenvolvimento,
 incluindo documentação com Swagger e testes automatizados.
 
----
-
 ## 🏗️ **Arquitetura**
 
 O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven architecture**:
@@ -26,8 +24,6 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
   dados por
   microserviço**.
 
----
-
 ## ✅ TODO List
 
 ### Implementado
@@ -44,8 +40,6 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 - Autenticação com JWT
 - Documentação com Swagger
 - Comunicação assíncrona via Kafka
-
----
 
 ## 📖 **Endpoints**
 
@@ -72,8 +66,6 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 | `GET`  | `/notifications`      | Listar notificações          |
 | `PUT`  | `/notifications/read` | Marcar notificação como lida |
 
----
-
 ## 📚 **Como Executar**
 
 1. Clone o repositório:
@@ -87,8 +79,6 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
    ```  
 3. Acesse os serviços:
     - **Documentação do Swagger**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
----
 
 ## 🧪 **Testes Automatizados**
 
