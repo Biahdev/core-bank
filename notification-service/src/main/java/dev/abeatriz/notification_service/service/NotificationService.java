@@ -8,8 +8,10 @@ import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class NotificationConsumerService {
+public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -25,5 +27,9 @@ public class NotificationConsumerService {
         var newNotification = new Notification(notification.getChannel(), notification.getNotes());
         notificationRepository.save(newNotification);
         System.out.println("Notificação consumida com sucesso!" + notification);
+    }
+
+    public List<Notification> listAll() {
+        return notificationRepository.findAll();
     }
 }

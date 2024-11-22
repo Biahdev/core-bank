@@ -1,7 +1,7 @@
 package dev.abeatriz.account_service.controller;
 
-import dev.abeatriz.account_service.dto.AccountCreateDTO;
-import dev.abeatriz.account_service.dto.AccountDetailDTO;
+import dev.abeatriz.account_service.dto.AccountCreate;
+import dev.abeatriz.account_service.dto.AccountDetail;
 import dev.abeatriz.account_service.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping
-    public AccountDetailDTO create(@RequestBody @Valid AccountCreateDTO json) {
+    public AccountDetail create(@RequestBody @Valid AccountCreate json) {
         return accountService.create(json);
     }
 
     @GetMapping("/{id}")
-    public AccountDetailDTO getById(@PathVariable("id") Long id) {
+    public AccountDetail getById(@PathVariable("id") Long id) {
        return accountService.getById(id);
     }
 

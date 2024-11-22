@@ -1,8 +1,8 @@
 package dev.abeatriz.account_service.service;
 
 
-import dev.abeatriz.account_service.dto.AccountCreateDTO;
-import dev.abeatriz.account_service.dto.AccountDetailDTO;
+import dev.abeatriz.account_service.dto.AccountCreate;
+import dev.abeatriz.account_service.dto.AccountDetail;
 import dev.abeatriz.account_service.entity.Account;
 import dev.abeatriz.account_service.entity.AccountStatus;
 import dev.abeatriz.account_service.entity.AccountType;
@@ -30,7 +30,7 @@ public class AccountService {
     private NotificationService notificationService;
 
     @Transactional
-    public AccountDetailDTO create(AccountCreateDTO json) {
+    public AccountDetail create(AccountCreate json) {
         var newAccount = new Account(json.name(), json.document(), new BigDecimal(0), AccountStatus.ATIVO, AccountType.CORRENTE);
         var accountEntity = accountRepository.save(newAccount);
 
@@ -43,7 +43,7 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public AccountDetailDTO getById(Long id) {
+    public AccountDetail getById(Long id) {
         var account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return accountMapper.toDTO(account);
     }

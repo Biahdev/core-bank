@@ -5,7 +5,7 @@ import dev.abeatriz.account_service.entity.AccountType;
 
 import java.math.BigDecimal;
 
-public record AccountDetailDTO(
+public record AccountDetail(
         Long accountId,
         String name,
         String document,
