@@ -18,6 +18,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
+
     private NotificationChannel channel;
 
     @Column(name = "is_read",  nullable = false)

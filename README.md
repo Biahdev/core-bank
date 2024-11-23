@@ -26,9 +26,10 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 ### Implementado
 - Operações básicas para contas, transações e notificações
 - Comunicação assíncrona via Kafka
+- Marcar notificações como lidas
 
 ### Em Progresso
-- Marcar notificações como lidas
+
 - Documentação com Swagger
 
 ### Planejado
@@ -56,10 +57,10 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 
 ### **Notification Service**
 
-| Método | Endpoint              | Descrição                    |
-|--------|-----------------------|------------------------------|
-| `GET`  | `/notifications`      | Listar notificações          |
-| `PUT`  | `/notifications/read` | Marcar notificação como lida |
+| Método | Endpoint                   | Descrição                    |
+|--------|----------------------------|------------------------------|
+| `GET`  | `/notifications`           | Listar notificações          |
+| `PUT`  | `/notifications/{id}/read` | Marcar notificação como lida |
 
 ## 📚 **Como Executar**
 
