@@ -19,9 +19,10 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
 
+    @Enumerated(EnumType.STRING)
     private NotificationChannel channel;
 
-    @Column(name = "is_read",  nullable = false)
+    @Column(name = "is_read", nullable = false)
     private Boolean isRead = false;
 
     private String notes;

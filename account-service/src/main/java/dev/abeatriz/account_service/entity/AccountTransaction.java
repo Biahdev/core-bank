@@ -24,6 +24,8 @@ public class AccountTransaction {
     private Long transactionId;
     private BigDecimal amount;
     private BigDecimal balanceAfterTransaction;
+
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
 
     @CreationTimestamp

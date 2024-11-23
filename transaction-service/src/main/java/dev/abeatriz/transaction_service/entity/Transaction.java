@@ -24,7 +24,11 @@ public class Transaction {
     private Long sourceAccountId;
     private Long destinationAccountId;
     private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+
+    @Enumerated(EnumType.STRING)
     private TransactionMethod method;
     private String notes;
 
@@ -36,7 +40,7 @@ public class Transaction {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Transaction(Long sourceAccountId, Long destinationAccountId, BigDecimal amount, TransactionStatus status,  TransactionMethod method, String notes) {
+    public Transaction(Long sourceAccountId, Long destinationAccountId, BigDecimal amount, TransactionStatus status, TransactionMethod method, String notes) {
         this.sourceAccountId = sourceAccountId;
         this.destinationAccountId = destinationAccountId;
         this.amount = amount;

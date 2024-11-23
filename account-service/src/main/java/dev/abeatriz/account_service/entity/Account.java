@@ -23,7 +23,11 @@ public class Account {
     private String name;
     private String document;
     private BigDecimal balance;
+
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
+
+    @Enumerated(EnumType.STRING)
     private AccountType type;
 
     @CreationTimestamp
