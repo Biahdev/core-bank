@@ -24,6 +24,7 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 ## ✅ TODO List
 
 ### Implementado
+
 - Operações básicas para contas, transações e notificações
 - Comunicação assíncrona via Kafka
 - Marcar notificações como lidas
@@ -33,34 +34,34 @@ O CoreBank segue uma arquitetura baseada em **microserviços** e **event-driven 
 - Documentação com Swagger
 
 ### Planejado
+
 - Autenticação com JWT
 - Testes automatizados
-
 
 ## 📖 **Endpoints**
 
 ### **Account Service**
 
-| Método | Endpoint         | Descrição       |
-|--------|------------------|-----------------|
-| `POST` | `/accounts`      | Criar conta     |
-| `GET`  | `/accounts`      | Listar contas   |
-| `GET`  | `/accounts/{id}` | Consultar saldo |
+| Método | Endpoint                        | Descrição       |
+|--------|---------------------------------|-----------------|
+| `POST` | `account-service/accounts`      | Criar conta     |
+| `GET`  | `account-service/accounts`      | Listar contas   |
+| `GET`  | `account-service/accounts/{id}` | Consultar saldo |
 
 ### **Transaction Service**
 
-| Método | Endpoint             | Descrição           |
-|--------|----------------------|---------------------|
-| `POST` | `/transactions`      | Criar transação     |
-| `GET`  | `/transactions`      | Listar transações   |
-| `GET`  | `/transactions/{id}` | Consultar transação |
+| Método | Endpoint                                | Descrição           |
+|--------|-----------------------------------------|---------------------|
+| `POST` | `transaction-service/transactions`      | Criar transação     |
+| `GET`  | `transaction-service/transactions`      | Listar transações   |
+| `GET`  | `transaction-service/transactions/{id}` | Consultar transação |
 
 ### **Notification Service**
 
-| Método | Endpoint                   | Descrição                    |
-|--------|----------------------------|------------------------------|
-| `GET`  | `/notifications`           | Listar notificações          |
-| `PUT`  | `/notifications/{id}/read` | Marcar notificação como lida |
+| Método | Endpoint                                       | Descrição                    |
+|--------|------------------------------------------------|------------------------------|
+| `GET`  | `notification-service/notifications`           | Listar notificações          |
+| `PUT`  | `notification-service/notifications/{id}/read` | Marcar notificação como lida |
 
 ## 📚 **Como Executar**
 

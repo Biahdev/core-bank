@@ -10,7 +10,7 @@ import java.util.List;
 
 @Tag(name = "Notificação", description = "Operações relacionadas entidade Notificação")
 @RestController
-@RequestMapping("/notification")
+@RequestMapping("/notifications")
 public class NotificationController {
 
     @Autowired

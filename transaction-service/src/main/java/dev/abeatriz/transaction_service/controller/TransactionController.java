@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Transação", description = "Operações relacionadas entidade transação")
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/transactions")
 @RequiredArgsConstructor
 public class TransactionController {
 
