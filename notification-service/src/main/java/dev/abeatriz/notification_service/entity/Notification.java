@@ -19,6 +19,10 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
     private NotificationChannel channel;
+
+    @Column(name = "is_read",  nullable = false)
+    private Boolean isRead = false;
+
     private String notes;
 
     @CreationTimestamp
