@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Service
@@ -43,8 +44,15 @@ public class AccountService {
     }
 
     @Transactional(readOnly = true)
-    public AccountDetail getById(Long id) {
+    public AccountDetail listById(Long id) {
         var account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return accountMapper.toDTO(account);
     }
+
+    @Transactional(readOnly = true)
+    public List<AccountDetail> listAll() {
+        return accountMapper.toDTO(accountRepository.findAll());
+    }
+
+
 }
