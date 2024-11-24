@@ -31,7 +31,7 @@ public class AccountService {
 
     @Transactional
     public AccountDetail create(AccountCreate json) {
-        var newAccount = new Account(json.name(), json.document(), new BigDecimal(0), AccountStatus.ATIVO, AccountType.CORRENTE);
+        var newAccount = new Account(json.name(), json.document(), json.amount(), AccountStatus.ATIVO, AccountType.CORRENTE);
         var accountEntity = accountRepository.save(newAccount);
 
         if (accountEntity.getAccountId() == null) throw new RuntimeException();
