@@ -2,6 +2,7 @@ package dev.abeatriz.account_service.controller;
 
 import dev.abeatriz.account_service.dto.AccountCreate;
 import dev.abeatriz.account_service.dto.AccountDetail;
+import dev.abeatriz.account_service.dto.AccountUpdate;
 import dev.abeatriz.account_service.entity.Account;
 import dev.abeatriz.account_service.service.AccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +33,11 @@ public class AccountController {
     @GetMapping
     public List<AccountDetail> listAll() {
         return accountService.listAll();
+    }
+
+    @PutMapping("{id}")
+    public AccountDetail update(@PathVariable("id") Long id, @RequestBody @Valid AccountUpdate json) {
+        return accountService.update(id, json);
     }
 
 

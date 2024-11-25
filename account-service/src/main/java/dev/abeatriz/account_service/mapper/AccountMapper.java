@@ -13,5 +13,7 @@ public interface AccountMapper {
 
     AccountDetail toDTO(Account entity);
 
+    Account toEntity(AccountDetail dto);
+
     List<AccountDetail> toDTO(List<Account> entity);
 }

@@ -4,6 +4,7 @@ import dev.abeatriz.account_service.entity.AccountTransaction;
 import dev.abeatriz.account_service.dto.NotificationMessage;
 import dev.abeatriz.account_service.entity.NotificationChannel;
 import dev.abeatriz.account_service.entity.TransactionType;
+import dev.abeatriz.account_service.mapper.AccountMapper;
 import dev.abeatriz.account_service.repository.AccountRepository;
 import dev.abeatriz.account_service.repository.AccountTransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,18 +26,18 @@ public class TransactionConsumerService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private KafkaTemplate<String, NotificationMessage> kafkaNotification;
-
-
-    private final String newNotificationTopic = "new-notication-topic";
+    private AccountMapper accountMapper;
 
     @Autowired
     private AccountTransactionRepository accountTransactionRepository;
 
+    @Autowired
+    private KafkaTemplate<String, NotificationMessage> kafkaNotification;
+
     @KafkaListener(topics = "new-transaction-topic")
     public void processarPagamento(TransactionAccountMessage transaction) {
-        var sourceAccount = accountRepository.findById(transaction.sourceAccountId()).orElseThrow(EntityNotFoundException::new);
-        var destinationAccount = accountRepository.findById(transaction.destinationAccountId()).orElseThrow(EntityNotFoundException::new);
+        var sourceAccount = accountMapper.toEntity(accountService.listById(transaction.sourceAccountId()));
+        var destinationAccount = accountMapper.toEntity(accountService.listById(transaction.destinationAccountId()));
 
         var newSourceAmount = sourceAccount.getBalance().subtract(transaction.amount());
         sourceAccount.setBalance(newSourceAmount);
@@ -52,12 +53,12 @@ public class TransactionConsumerService {
         var newDestinationSource = new AccountTransaction(transaction.destinationAccountId(), transaction.transactionId(), transaction.amount(), newDestinationAmount, TransactionType.RECEIPT);
         accountTransactionRepository.save(newDestinationSource);
 
+        var newNotificationTopic = "new-notication-topic";
         var notificationSourceMessage = new NotificationMessage(transaction.sourceAccountId(), NotificationChannel.PUSH, "Transação enviada com sucesso!");
         kafkaNotification.send(newNotificationTopic, notificationSourceMessage);
-        System.out.println("Transação consumida com sucesso!" + notificationSourceMessage);
 
         var notificationDestinationMessage = new NotificationMessage(transaction.destinationAccountId(), NotificationChannel.PUSH, "Você recebeu uma transação de R$" + transaction.amount());
         kafkaNotification.send(newNotificationTopic, notificationDestinationMessage);
-        System.out.println("Transação consumida com sucesso!" + notificationDestinationMessage);
+        ;
     }
 }

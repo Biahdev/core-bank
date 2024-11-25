@@ -3,6 +3,7 @@ package dev.abeatriz.account_service.service;
 
 import dev.abeatriz.account_service.dto.AccountCreate;
 import dev.abeatriz.account_service.dto.AccountDetail;
+import dev.abeatriz.account_service.dto.AccountUpdate;
 import dev.abeatriz.account_service.entity.Account;
 import dev.abeatriz.account_service.entity.AccountStatus;
 import dev.abeatriz.account_service.entity.AccountType;
@@ -32,7 +33,7 @@ public class AccountService {
 
     @Transactional
     public AccountDetail create(AccountCreate json) {
-        var newAccount = new Account(json.name(), json.document(), json.amount(), AccountStatus.ATIVO, AccountType.CORRENTE);
+        var newAccount = new Account(json.name(), json.document(), json.balance(), AccountStatus.ATIVO, AccountType.CORRENTE);
         var accountEntity = accountRepository.save(newAccount);
 
         if (accountEntity.getAccountId() == null) throw new RuntimeException();
@@ -54,5 +55,11 @@ public class AccountService {
         return accountMapper.toDTO(accountRepository.findAll());
     }
 
+    @Transactional
+    public AccountDetail update(Long id, AccountUpdate json){
+        var account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        account.update(json);
+        return accountMapper.toDTO(account);
+    }
 
 }
