@@ -36,7 +36,7 @@ public class AccountService {
         var newAccount = new Account(json.name(), json.document(), json.balance(), AccountStatus.ATIVO, AccountType.CORRENTE);
         var accountEntity = accountRepository.save(newAccount);
 
-        if (accountEntity.getAccountId() == null) throw new RuntimeException();
+        if (accountEntity.getAccountId() == null) throw new EntityNotFoundException();
 
         notificationService.create(accountEntity.getAccountId(), NotificationChannel.EMAIL, "Parabéns! Conta criada com sucesso");
         notificationService.create(accountEntity.getAccountId(), NotificationChannel.SMS, "Parabéns! Conta criada com sucesso acesse o email para mais informações");

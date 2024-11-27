@@ -1,5 +1,6 @@
 package dev.abeatriz.account_service.mapper;
 
+import dev.abeatriz.account_service.dto.AccountCreate;
 import dev.abeatriz.account_service.dto.AccountDetail;
 import dev.abeatriz.account_service.entity.Account;
 import org.mapstruct.Mapper;
@@ -12,6 +13,8 @@ public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     AccountDetail toDTO(Account entity);
+
+    Account toEntity(AccountCreate dto);
 
     Account toEntity(AccountDetail dto);
 
