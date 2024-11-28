@@ -56,9 +56,16 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDetail update(Long id, AccountUpdate json){
+    public AccountDetail update(Long id, AccountUpdate json) {
         var account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         account.update(json);
+        return accountMapper.toDTO(account);
+    }
+
+    @Transactional
+    public AccountDetail disable(Long id) {
+        var account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        account.disable();
         return accountMapper.toDTO(account);
     }
 

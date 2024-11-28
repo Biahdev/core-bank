@@ -56,5 +56,9 @@ public class Account {
         this.type = json.type() != null ? json.type() : this.type;
     }
 
+    public void disable(){
+        this.status = AccountStatus.INATIVO;
+    }
+
 
 }

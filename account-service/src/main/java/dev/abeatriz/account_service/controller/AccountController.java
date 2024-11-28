@@ -50,7 +50,7 @@ public class AccountController {
     }
 
     @Operation(
-            summary = "Listagem todas",
+            summary = "Listagem",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -91,11 +91,11 @@ public class AccountController {
 
 
     @Operation(
-            summary = "Update",
+            summary = "Atualizar",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Update com sucesso",
+                            description = "Atualizado com sucesso",
                             content = {@Content(schema = @Schema(implementation = AccountDetail.class), mediaType = "application/json")}
                     ),
                     @ApiResponse(
@@ -115,5 +115,28 @@ public class AccountController {
         return accountService.update(id, json);
     }
 
-
+    @Operation(
+            summary = "Desativar",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Desativado com sucesso",
+                            content = {@Content(schema = @Schema(implementation = AccountDetail.class), mediaType = "application/json")}
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Valores inválidos",
+                            content = {@Content(schema = @Schema(implementation = ErrorMessage.class), mediaType = "application/json")}
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Recurso ou Entidade não foi encontrado",
+                            content = {@Content(schema = @Schema(implementation = ErrorMessage.class), mediaType = "application/json")}
+                    ),
+            }
+    )
+    @PutMapping("{id}/disable")
+    public AccountDetail disable(@PathVariable("id") Long id) {
+        return accountService.disable(id);
+    }
 }

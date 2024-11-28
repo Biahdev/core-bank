@@ -2,12 +2,14 @@ package dev.abeatriz.account_service.service;
 
 import dev.abeatriz.account_service.dto.AccountCreate;
 import dev.abeatriz.account_service.dto.AccountDetail;
+import dev.abeatriz.account_service.dto.AccountUpdate;
 import dev.abeatriz.account_service.entity.Account;
 import dev.abeatriz.account_service.entity.AccountStatus;
 import dev.abeatriz.account_service.entity.AccountType;
 import dev.abeatriz.account_service.entity.NotificationChannel;
 import dev.abeatriz.account_service.mapper.AccountMapper;
 import dev.abeatriz.account_service.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -35,10 +38,8 @@ public class AccountServiceTest {
     @InjectMocks
     AccountService accountService;
 
-
     @Mock
     private NotificationService notificationService;
-
 
     @Mock
     private AccountMapper mapperMock;
@@ -46,6 +47,7 @@ public class AccountServiceTest {
     private final AccountMapper mapper = AccountMapper.INSTANCE;
 
     AccountCreate accountCreate;
+    AccountUpdate accountUpdate;
     Account accountEntity;
     AccountDetail accountDetail;
 
@@ -57,10 +59,11 @@ public class AccountServiceTest {
         accountEntity.setType(AccountType.CORRENTE);
         accountEntity.setStatus(AccountStatus.ATIVO);
         accountDetail = mapper.toDTO(accountEntity);
+        accountUpdate = new AccountUpdate("Cecilia", "1231241212", AccountStatus.ATIVO, AccountType.POUPANCA);
     }
 
     @Test
-    void create_CreatesAccountAndSendsNotifications_WhenInputIsValid() {
+    void testCreateAccountWithValidInputs() {
         // Given
         given(accountRepository.save(any(Account.class))).willReturn(accountEntity);
         given(mapperMock.toDTO(accountEntity)).willReturn(accountDetail);
@@ -81,12 +84,29 @@ public class AccountServiceTest {
     }
 
     @Test
-    void create_ShouldThrowException_WhenAccountSaveFails() {
-        given(accountRepository.save(any(Account.class))).willReturn(null);
+    void testUpdateAccountNotFound() {
+        given(accountRepository.findById(1L)).willReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> accountService.create(accountCreate));
+        assertThrows(EntityNotFoundException.class, () -> accountService.update(1L, accountUpdate));
 
         verify(notificationService, times(0)).create(anyLong(), any(NotificationChannel.class), anyString());
+    }
+
+
+    @Test
+    void testDisableAccountNotFound() {
+        given(accountRepository.findById(1L)).willReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> accountService.disable(1L));
+
+        verify(notificationService, times(0)).create(anyLong(), any(NotificationChannel.class), anyString());
+    }
+
+    @Test
+    void testListByIdNotFound() {
+        given(accountRepository.findById(1L)).willReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> accountService.listById(1L));
     }
 
 

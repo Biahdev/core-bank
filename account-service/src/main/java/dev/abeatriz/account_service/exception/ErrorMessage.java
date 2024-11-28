@@ -18,6 +18,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Schema(
+        title = "Mensagem de Erro",
         description = "Objeto que representa a mensagem de erro retornada pela API, incluindo o status da requisição, a mensagem de erro e informações adicionais sobre os campos que causaram o erro, se houver."
 )
 public class ErrorMessage {
@@ -29,7 +30,7 @@ public class ErrorMessage {
     @Schema(title = "Status HTTP", example = "400", type = "integer")
     private int status;
 
-    @Schema(title = "Mensagem de Erro", example = "O campo 'nome' é obrigatório.", type = "string")
+    @Schema(title = "Mensagem de Erro", example = "Os Campos informados estão inválidos", type = "string")
     private String message;
 
     @Schema(title = "Campos de Erro", example = "{\"nome\": [\"O nome não pode estar em branco\"]}", type = "object")
