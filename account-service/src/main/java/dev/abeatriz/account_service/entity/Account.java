@@ -52,9 +52,9 @@ public class Account {
     public void update(AccountUpdate json) {
         this.name = json.name() != null ? json.name() : this.name;
         this.document = json.document() != null ? json.document() : this.document;
-        this.balance = json.balance() != null ? json.balance() : this.balance;
         this.status = json.status() != null ? json.status() : this.status;
         this.type = json.type() != null ? json.type() : this.type;
     }
+
 
 }
